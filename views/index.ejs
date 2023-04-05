@@ -21,7 +21,8 @@ sub.on( 'message', function( topic, message ){
     + '<p style="text-align:right">' + timestamp2datetime( payload.created ) + '</p>'
     + '</div>'
     + '<hr/>';
-  $('#items').prepend( div );
+  //$('#items').prepend( div );
+  $(div).prependTo('#items').hide().fadeIn( 2000 );  //. #2
 });
 <% } %>
 function timestamp2datetime( ts ){
