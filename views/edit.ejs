@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3c.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<meta charset="utf8"/>
+<meta http-equiv="pragma" content="no-cache"/>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.5.1/js/bootstrap.min.js"></script>
+<title>MoWS(MQTT over WebSocket)</title>
+<script>
+function submitItem(){
+  var title = $('#title').val();
+  var body = $('#body').val();
+  var data = {
+    title: title,
+    body: body
+  };
+  $.ajax({
+    url: '/edit',
+    type: 'POST',
+    contentType: 'application/json',
+    dataType: 'json',
+    data: JSON.stringify( data ),
+    success: function( result ){
+      location.href = '/edit';
+    },
+    error: function( e0, e1, e2 ){
+      console.log( e0, e1, e2 );
+    }
+  })
+}
+</script>
+</head>
+<body>
+
+<div id="newitem">
+
+<table class="table table-bordered">
+  <tr>
+    <td>タイトル</td>
+    <td><input type="text" name="title" id="title" value=""/></td>
+  </tr>
+  <tr>
+    <td>本文</td>
+    <td><textarea name="body" id="body" rows="5" cols="50"></textarea></td>
+  </tr>
+  <tr>
+    <td colspan="2"><input type="button" value="送信" onClick="submitItem();"/></td>
+  </tr>
+</table>
+
+</div>
+
+</body>
+</html>

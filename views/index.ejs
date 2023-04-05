@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3c.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<meta charset="utf8"/>
+<meta http-equiv="pragma" content="no-cache"/>
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.5.1/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<script>
+<% if( mows_url && mqtt_topic ){ %>
+var sub = mqtt.connect( '<%= mows_url %>' );
+var topic = '<%= mqtt_topic %>';
+sub.subscribe( topic );
+
+sub.on( 'message', function( topic, message ){
+  var payload = JSON.parse( message.toString() );
+  var div = '<div class="divs" id="div-' + payload.id + '">'
+    + '<h2>' + payload.title + '</h2>'
+    + '<p><pre>' + payload.body + '</pre></p>'
+    + '<p style="text-align:right">' + timestamp2datetime( payload.created ) + '</p>'
+    + '</div>'
+    + '<hr/>';
+  $('#items').prepend( div );
+});
+<% } %>
+function timestamp2datetime( ts ){
+  var dt = new Date( ts );
+  if( ts ){ 
+    if( typeof ts == 'string' ){ ts = parseInt( ts ); }
+    dt.setTime( ts ); 
+  }
+
+  var yyyy = dt.getFullYear();
+  var mm = dt.getMonth() + 1;
+  var dd = dt.getDate();
+  var hh = dt.getHours();
+  var nn = dt.getMinutes();
+  var ss = dt.getSeconds();
+  var datetime = yyyy + '-' + ( mm < 10 ? '0' : '' ) + mm + '-' + ( dd < 10 ? '0' : '' ) + dd
+    + ' ' + ( hh < 10 ? '0' : '' ) + hh + ':' + ( nn < 10 ? '0' : '' ) + nn + ':' + ( ss < 10 ? '0' : '' ) + ss;
+  return datetime;
+}
+<%
+function timestamp2datetime( ts ){
+  var dt = new Date( ts );
+  if( ts ){ 
+    if( typeof ts == 'string' ){ ts = parseInt( ts ); }
+    dt.setTime( ts ); 
+  }
+
+  var yyyy = dt.getFullYear();
+  var mm = dt.getMonth() + 1;
+  var dd = dt.getDate();
+  var hh = dt.getHours();
+  var nn = dt.getMinutes();
+  var ss = dt.getSeconds();
+  var datetime = yyyy + '-' + ( mm < 10 ? '0' : '' ) + mm + '-' + ( dd < 10 ? '0' : '' ) + dd
+    + ' ' + ( hh < 10 ? '0' : '' ) + hh + ':' + ( nn < 10 ? '0' : '' ) + nn + ':' + ( ss < 10 ? '0' : '' ) + ss;
+  return datetime;
+}
+%>
+</script>
+<style>
+.divs{
+  background-color: #cfc;
+}
+</style>
+<title>MoWS(MQTT over WebSocket)</title>
+</head>
+<body>
+
+<div id="items">
+
+<% for( var i = 0; i < items.length; i ++ ){ %>
+<div class="divs" id="div-<%= items[i].id %>">
+<h2><%= items[i].title %></h2>
+<p><pre><%- items[i].body %></pre></p>
+<p style="text-align:right"><%= timestamp2datetime( items[i].created ) %></p>
+</div>
+<hr/>
+<% } %>
+
+</div>
+
+</body>
+</html>
