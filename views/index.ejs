@@ -10,8 +10,7 @@
 <script>
 <% if( mows_url && mqtt_topic ){ %>
 var sub = mqtt.connect( '<%= mows_url %>' );
-var topic = '<%= mqtt_topic %>';
-sub.subscribe( topic );
+sub.subscribe( '<%= mqtt_topic %>' );
 
 sub.on( 'message', function( topic, message ){
   var payload = JSON.parse( message.toString() );
@@ -22,7 +21,7 @@ sub.on( 'message', function( topic, message ){
     + '</div>'
     + '<hr/>';
   //$('#items').prepend( div );
-  $(div).prependTo('#items').hide().fadeIn( 2000 );  //. #2
+  $(div).prependTo('#items').hide().fadeIn( 2000 );  //. #1
 });
 <% } %>
 function timestamp2datetime( ts ){
